@@ -24,12 +24,9 @@
 #import "AFHTTPRequestOperationLogger.h"
 
 
-#ifdef DEBUG
 
 @interface AFHTTPRequestOperationLogger (VolumeControl)
 
 @property (nonatomic, assign) CGFloat volumeLevel;
 
 @end
-
-#endif

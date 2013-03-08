@@ -26,8 +26,6 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <objc/runtime.h>
 
-#ifdef DEBUG
-
 char *const AFHTTPRequestOperationLoggerVolumeLevelKey;
 
 static NSString *NSStringFromAFHTTPRequestLoggerLevel(AFHTTPRequestLoggerLevel logLevel)
@@ -116,6 +114,8 @@ static void class_swizzleSelector(Class class, SEL originalSelector, SEL newSele
 - (id)__hookedInit __attribute__((objc_method_family(init)))
 {
     if ((self = [self __hookedInit])) {
+#ifdef DEBUG
+        
         CGFloat volumeLevel = [MPMusicPlayerController applicationMusicPlayer].volume;
         objc_setAssociatedObject(self, &AFHTTPRequestOperationLoggerVolumeLevelKey,
                                  @(volumeLevel), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -128,6 +128,8 @@ static void class_swizzleSelector(Class class, SEL originalSelector, SEL newSele
         });
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_volumeLevelDidChangeCallback:) name:@"AVSystemController_SystemVolumeDidChangeNotification" object:nil];
+        
+#endif
     }
     
     return self;
@@ -135,10 +137,14 @@ static void class_swizzleSelector(Class class, SEL originalSelector, SEL newSele
 
 #pragma mark - private implementation
 
+#ifdef DEBUG
+
 - (void)_volumeLevelDidChangeCallback:(NSNotification *)notification
 {
     self.volumeLevel = [notification.userInfo[@"AVSystemController_AudioVolumeNotificationParameter"] floatValue];
 }
+
+#endif
 
 - (void)_volumeLevelDidIncrease
 {
@@ -179,5 +185,3 @@ static void class_swizzleSelector(Class class, SEL originalSelector, SEL newSele
 }
 
 @end
-
-#endif

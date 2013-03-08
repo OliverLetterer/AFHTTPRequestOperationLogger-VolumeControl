@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name         = "AFHTTPRequestOperationLogger-VolumeControl"
   s.version      = "0.0.1"
-  s.summary      = "Objc runtime additions."
+  s.summary      = "Change log level with hardware volume buttons."
   s.homepage     = "https://github.com/OliverLetterer/AFHTTPRequestOperationLogger-VolumeControl"
 
   s.license      = 'MIT'
